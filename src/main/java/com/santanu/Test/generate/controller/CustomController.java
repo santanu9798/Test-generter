@@ -1,4 +1,4 @@
-package com.santanu.Test.generter.controller;
+package com.santanu.Test.generate.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

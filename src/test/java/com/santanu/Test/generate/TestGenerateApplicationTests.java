@@ -1,10 +1,10 @@
-package com.santanu.Test.generter;
+package com.santanu.Test.generate;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class TestGenerterApplicationTests {
+class TestGenerateApplicationTests {
 
 	@Test
 	void contextLoads() {
