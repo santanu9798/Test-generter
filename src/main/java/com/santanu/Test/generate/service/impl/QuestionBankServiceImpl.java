@@ -8,6 +8,8 @@ import com.santanu.Test.generate.service.QuestionBankService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class QuestionBankServiceImpl implements QuestionBankService {
 
@@ -30,5 +32,11 @@ public class QuestionBankServiceImpl implements QuestionBankService {
         Question response = questionBankRepository.save(request);
 
         return questionBankMapper.toDTO(response);
+    }
+
+    @Override
+    public List<Question> getAllQuestion() {
+
+        return questionBankRepository.findAll().stream().toList();
     }
 }
