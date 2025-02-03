@@ -97,11 +97,61 @@ CREATE TABLE AuditLogs (
 
 #### **2. Question Management**
 - **Add Question**: `POST /api/questions`
+- Request payload:
+  ```{
+    "text": "ABC",
+    "type": "MCQ",
+    "topic": "Basic",
+    "difficulty": "EASY",
+    "options": [
+    "a",
+    "b",
+    "c",
+    "d"
+    ],
+    "correctAnswer": "c",
+    "marks": 1
+    } 
+  ```
 - **Fetch Questions**: `GET /api/questions`
     - Query parameters: `topic`, `difficulty`, `type`, `limit`.
 
 #### **3. Test Paper Management**
 - **Generate Test Paper**: `POST /api/test-papers/generate`
+```
+{
+    "name": "Final",
+    "courseName": "MCA",
+    "courseCode": "MCA-503",
+    "description": "This is final paper.",
+    "totalMarks": 100,
+    "totalQuestions": 65,
+    "credit": 4,
+    "totalTime": "2:30",
+    "distributions": [
+        {
+            "type": "MCQ",
+            "count": 30,
+            "marksPerQuestion": 1
+        },
+        {
+            "type": "Ture/False",
+            "count": 20,
+            "marksPerQuestion": 1
+        },
+        {
+            "type": "Short",
+            "count": 10,
+            "marksPerQuestion": 2
+        },
+        {
+            "type": "Long",
+            "count": 5,
+            "marksPerQuestion": 6
+        }
+    ]
+}
+```
 - **Get Test Paper Details**: `GET /api/test-papers/{id}`
 - **Export Test Paper**: `GET /api/test-papers/{id}/export?format=pdf`
 
