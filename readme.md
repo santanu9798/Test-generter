@@ -97,7 +97,7 @@ CREATE TABLE AuditLogs (
 
 #### **2. Question Management**
 - **Add Question**: `POST /api/questions`
-- Request payload:
+
   ```{
     "text": "ABC",
     "type": "MCQ",
