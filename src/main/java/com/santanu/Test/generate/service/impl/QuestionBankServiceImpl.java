@@ -1,6 +1,7 @@
 package com.santanu.Test.generate.service.impl;
 
 import com.santanu.Test.generate.dto.QuestionDTO;
+import com.santanu.Test.generate.dto.enumaration.QuestionType;
 import com.santanu.Test.generate.mapper.QuestionBankMapper;
 import com.santanu.Test.generate.model.Question;
 import com.santanu.Test.generate.repository.QuestionBankRepository;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionBankServiceImpl implements QuestionBankService {
@@ -38,5 +41,13 @@ public class QuestionBankServiceImpl implements QuestionBankService {
     public List<Question> getAllQuestion() {
 
         return questionBankRepository.findAll().stream().toList();
+    }
+
+    @Override
+    public Map<String, List<Question>> getAllQuestionByQuestionType() {
+
+        return questionBankRepository.findAll().stream()
+                .collect(Collectors.groupingBy(q -> q.getType().name()));
+
     }
 }

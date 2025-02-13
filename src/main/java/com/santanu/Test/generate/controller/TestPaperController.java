@@ -9,6 +9,7 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.properties.*;
 import com.santanu.Test.generate.dto.PaperDTO;
 import com.santanu.Test.generate.dto.PaperQuestionsDTO;
+import com.santanu.Test.generate.dto.enumaration.QuestionType;
 import com.santanu.Test.generate.model.Distribution;
 import com.santanu.Test.generate.model.Paper;
 import com.santanu.Test.generate.model.Question;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -84,7 +86,7 @@ public class TestPaperController {
     public ResponseEntity<byte[]> exportTestPaper(@PathVariable Long id){
         Optional<Paper> response = testPaperService.getTestPaper(id);
 
-        List<Question> allQuestion = questionBankService.getAllQuestion();
+        Map<String, List<Question>> questionByQuestionType = questionBankService.getAllQuestionByQuestionType();
 
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
@@ -143,25 +145,27 @@ public class TestPaperController {
         for (Distribution distribution: paper.getDistributions()){
             switch (distribution.getType()) {
                 case "MCQ" -> {
+
                     document.add(new Paragraph("Section - A").setTextAlignment(TextAlignment.LEFT).setFontSize(12).setBold());
                     document.add(new Paragraph("1. This is MCQ questions. (" + distribution.getCount() + " X " + distribution.getMarksPerQuestion() + " =" + distribution.getCount() * distribution.getMarksPerQuestion() + ")"));
-                    printQuestions(allQuestion, document);
+                    printQuestions(questionByQuestionType.get(distribution.getType()), document);
                 }
                 case "TRUE_FALSE" -> {
                     document.add(new Paragraph("Section - B").setTextAlignment(TextAlignment.LEFT).setFontSize(12).setBold());
                     document.add(new Paragraph("2. This is Ture/False questions. (" + distribution.getCount() + " X " + distribution.getMarksPerQuestion() + " =" + distribution.getCount() * distribution.getMarksPerQuestion() + ")"));
-                    printQuestions(allQuestion, document);
+                    printQuestions(questionByQuestionType.get(distribution.getType()), document);
                 }
                 case "SHORT" -> {
                     document.add(new Paragraph("Section - C").setTextAlignment(TextAlignment.LEFT).setFontSize(12).setBold());
                     document.add(new Paragraph("3. This is Short questions. (" + distribution.getCount() + " X " + distribution.getMarksPerQuestion() + " =" + distribution.getCount() * distribution.getMarksPerQuestion() + ")"));
-                    printQuestions(allQuestion, document);
+                    printQuestions(questionByQuestionType.get(distribution.getType()), document);
                 }
                 case "LONG" -> {
                     document.add(new Paragraph("Section - D").setTextAlignment(TextAlignment.LEFT).setFontSize(12).setBold());
                     document.add(new Paragraph("4. This is Long questions. (" + distribution.getCount() + " X " + distribution.getMarksPerQuestion() + " =" + distribution.getCount() * distribution.getMarksPerQuestion() + ")"));
-                    printQuestions(allQuestion, document);
+                    printQuestions(questionByQuestionType.get(distribution.getType()), document);
                 }
+                default -> throw new IllegalStateException("Unexpected value: " + distribution.getType());
             }
 
         }
