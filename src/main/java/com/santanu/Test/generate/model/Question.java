@@ -1,7 +1,8 @@
 package com.santanu.Test.generate.model;
 
 
-import com.santanu.Test.generate.dto.QuestionDTO;
+import com.santanu.Test.generate.dto.enumaration.Difficulty;
+import com.santanu.Test.generate.dto.enumaration.QuestionType;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,12 +17,12 @@ public class Question {
     private String text;
 
     @Enumerated(EnumType.STRING)
-    private QuestionDTO.QuestionType type;
+    private QuestionType type;
 
     private String topic;
 
     @Enumerated(EnumType.STRING)
-    private QuestionDTO.Difficulty difficulty;
+    private Difficulty difficulty;
 
     private String options;
 

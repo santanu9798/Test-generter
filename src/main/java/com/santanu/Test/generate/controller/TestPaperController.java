@@ -8,6 +8,7 @@ import com.itextpdf.layout.element.Div;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.properties.*;
 import com.santanu.Test.generate.dto.PaperDTO;
+import com.santanu.Test.generate.dto.PaperQuestionsDTO;
 import com.santanu.Test.generate.model.Distribution;
 import com.santanu.Test.generate.model.Paper;
 import com.santanu.Test.generate.model.Question;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController("/api/test-papers")
 @Tag(name = "Test Paper Management")
@@ -56,6 +58,28 @@ public class TestPaperController {
                 .body(paper)).orElseGet(() -> ResponseEntity.notFound().build());
 
     }
+
+    @GetMapping("/{paperId}/questions")
+    public ResponseEntity<PaperQuestionsDTO> getQuestionsForPaper(@PathVariable Long paperId) {
+        PaperQuestionsDTO response = testPaperService.fetchQuestionByTestPaper(paperId);
+
+        return ResponseEntity.ok()
+                .header("Custom-Header", "Value")
+                .body(response);
+    }
+
+
+    @GetMapping("/view-question/{id}")
+    public ResponseEntity<Paper> viewQuestion(@PathVariable Long id) {
+        Optional<Paper> response = testPaperService.getTestPaper(id);
+
+        return response.map(paper -> ResponseEntity.ok()
+                .header("Custom-Header", "Value")
+                .body(paper)).orElseGet(() -> ResponseEntity.notFound().build());
+
+    }
+
+
     @GetMapping("/{id}/export")
     public ResponseEntity<byte[]> exportTestPaper(@PathVariable Long id){
         Optional<Paper> response = testPaperService.getTestPaper(id);
@@ -121,32 +145,27 @@ public class TestPaperController {
                 case "MCQ" -> {
                     document.add(new Paragraph("Section - A").setTextAlignment(TextAlignment.LEFT).setFontSize(12).setBold());
                     document.add(new Paragraph("1. This is MCQ questions. (" + distribution.getCount() + " X " + distribution.getMarksPerQuestion() + " =" + distribution.getCount() * distribution.getMarksPerQuestion() + ")"));
+                    printQuestions(allQuestion, document);
                 }
-                case "Ture/False" -> {
+                case "TRUE_FALSE" -> {
                     document.add(new Paragraph("Section - B").setTextAlignment(TextAlignment.LEFT).setFontSize(12).setBold());
                     document.add(new Paragraph("2. This is Ture/False questions. (" + distribution.getCount() + " X " + distribution.getMarksPerQuestion() + " =" + distribution.getCount() * distribution.getMarksPerQuestion() + ")"));
+                    printQuestions(allQuestion, document);
                 }
-                case "Short" -> {
+                case "SHORT" -> {
                     document.add(new Paragraph("Section - C").setTextAlignment(TextAlignment.LEFT).setFontSize(12).setBold());
                     document.add(new Paragraph("3. This is Short questions. (" + distribution.getCount() + " X " + distribution.getMarksPerQuestion() + " =" + distribution.getCount() * distribution.getMarksPerQuestion() + ")"));
+                    printQuestions(allQuestion, document);
                 }
-                case "Long" -> {
+                case "LONG" -> {
                     document.add(new Paragraph("Section - D").setTextAlignment(TextAlignment.LEFT).setFontSize(12).setBold());
                     document.add(new Paragraph("4. This is Long questions. (" + distribution.getCount() + " X " + distribution.getMarksPerQuestion() + " =" + distribution.getCount() * distribution.getMarksPerQuestion() + ")"));
+                    printQuestions(allQuestion, document);
                 }
             }
 
         }
 
-        allQuestion.forEach(questionDTO -> {
-            document.add(new Paragraph("\n"));
-            document.add(new Paragraph(questionDTO.getText()));
-
-            Arrays.stream(questionDTO.getOptions().split(",")).forEach(option->{
-                document.add(new Paragraph(option));
-            });
-            document.add(new Paragraph("\n"));
-        });
 
         document.close();
 
@@ -158,5 +177,20 @@ public class TestPaperController {
         return new ResponseEntity<>(byteArrayOutputStream.toByteArray(), headers, HttpStatus.OK);
 
 
+    }
+
+    private static void printQuestions(List<Question> allQuestion, Document document) {
+        AtomicInteger index = new AtomicInteger();
+        index.set(1);
+        allQuestion.forEach(questionDTO -> {
+            document.add(new Paragraph("\n"));
+            document.add(new Paragraph(index+". "+questionDTO.getText()));
+
+            Arrays.stream(questionDTO.getOptions().split(",")).forEach(option->{
+                document.add(new Paragraph(index+". "+option));
+            });
+            document.add(new Paragraph("\n"));
+            index.getAndIncrement();
+        });
     }
 }

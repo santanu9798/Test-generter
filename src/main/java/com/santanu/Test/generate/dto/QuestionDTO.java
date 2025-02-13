@@ -1,10 +1,14 @@
 package com.santanu.Test.generate.dto;
 
+import com.santanu.Test.generate.dto.enumaration.Difficulty;
+import com.santanu.Test.generate.dto.enumaration.QuestionType;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
+@Builder
 public class QuestionDTO {
 
     private Long id;
@@ -15,12 +19,4 @@ public class QuestionDTO {
     private List<String> options;
     private String correctAnswer;
     private int marks;
-
-    public enum QuestionType {
-        MCQ, DESCRIPTIVE, TRUE_FALSE
-    }
-
-    public enum Difficulty {
-        EASY, MEDIUM, HARD
-    }
 }
