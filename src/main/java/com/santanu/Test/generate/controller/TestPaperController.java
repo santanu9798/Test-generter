@@ -28,6 +28,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.santanu.Test.generate.utils.TestPaperUtils.getOption;
+
 @RestController("/api/test-papers")
 @Tag(name = "Test Paper Management")
 @Validated
@@ -198,19 +200,6 @@ public class TestPaperController {
                 optionParagraph.setFirstLineIndent(30f);
                 document.add(optionParagraph);
             });
-            //document.add(new Paragraph("\n").setFirstLineIndent(20f));
         });
-    }
-
-    private static char getOption(int index) {
-        if (index < 0 || index >= 26) {
-            throw new IllegalArgumentException("Index must be between 0 and 25.");
-        }
-
-        String alphabetString = "abcdefghijklmnopqrstuvwxyz";
-
-        char[] alphabet = alphabetString.toCharArray();
-
-        return alphabet[index];
     }
 }
