@@ -145,7 +145,6 @@ public class TestPaperController {
         for (Distribution distribution: paper.getDistributions()){
             switch (distribution.getType()) {
                 case "MCQ" -> {
-
                     document.add(new Paragraph("Section - A").setTextAlignment(TextAlignment.LEFT).setFontSize(12).setBold());
                     document.add(new Paragraph("1. This is MCQ questions. (" + distribution.getCount() + " X " + distribution.getMarksPerQuestion() + " =" + distribution.getCount() * distribution.getMarksPerQuestion() + ")"));
                     printQuestions(questionByQuestionType.get(distribution.getType()), document);
@@ -184,17 +183,34 @@ public class TestPaperController {
     }
 
     private static void printQuestions(List<Question> allQuestion, Document document) {
-        AtomicInteger index = new AtomicInteger();
-        index.set(1);
-        allQuestion.forEach(questionDTO -> {
-            document.add(new Paragraph("\n"));
-            document.add(new Paragraph(index+". "+questionDTO.getText()));
 
-            Arrays.stream(questionDTO.getOptions().split(",")).forEach(option->{
-                document.add(new Paragraph(index+". "+option));
+        AtomicInteger i = new AtomicInteger(1);
+        allQuestion.forEach(questionDTO -> {
+            Paragraph paragraphQuestion = new Paragraph();
+            paragraphQuestion.add(i.getAndIncrement()+". "+questionDTO.getText());
+            paragraphQuestion.setFirstLineIndent(20f);
+            document.add(paragraphQuestion);
+
+            AtomicInteger j = new AtomicInteger(0);
+            Arrays.stream(questionDTO.getOptions().split(",")).forEach(option -> {
+                Paragraph optionParagraph = new Paragraph();
+                optionParagraph.add(getOption(j.getAndIncrement()) + ". " + option);
+                optionParagraph.setFirstLineIndent(30f);
+                document.add(optionParagraph);
             });
-            document.add(new Paragraph("\n"));
-            index.getAndIncrement();
+            //document.add(new Paragraph("\n").setFirstLineIndent(20f));
         });
+    }
+
+    private static char getOption(int index) {
+        if (index < 0 || index >= 26) {
+            throw new IllegalArgumentException("Index must be between 0 and 25.");
+        }
+
+        String alphabetString = "abcdefghijklmnopqrstuvwxyz";
+
+        char[] alphabet = alphabetString.toCharArray();
+
+        return alphabet[index];
     }
 }
