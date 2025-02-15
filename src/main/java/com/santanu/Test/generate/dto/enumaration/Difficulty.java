@@ -1,5 +1,8 @@
 package com.santanu.Test.generate.dto.enumaration;
 
+import lombok.Getter;
+
+@Getter
 public enum Difficulty {
     EASY("Easy"),
     MEDIUM("Medium"),
@@ -11,7 +14,4 @@ public enum Difficulty {
         this.value = value;
     }
 
-    public String getValue() {
-        return value;
-    }
 }
