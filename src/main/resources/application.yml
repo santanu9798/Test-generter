@@ -1,0 +1,50 @@
+# Server Configuration
+server:
+  port: 3000
+
+# H2 Database Configuration
+spring:
+  h2:
+    console:
+      enabled: true          # Enable H2 console for debugging
+      path: /h2-console      # Access at http://localhost:3000/h2-console
+  datasource:
+    url: jdbc:h2:mem:testdb # In-memory H2 database
+    driver-class-name: org.h2.Driver
+    username: sa            # Default H2 username
+    password:               # No password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update      # Auto-create/update tables
+    show-sql: true          # Log SQL statements
+
+  # Mail Configuration (for forgot-password)
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: your-email@gmail.com      # Replace with your Gmail address
+    password: your-app-password         # Replace with your Gmail app-specific password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+jwt:
+  secret: "ThisIsAVeryLongSecretKeyWithAtLeast32BytesForHS512Security"
+  expiration: 86400000
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html  # Change URL if desired
+  api-docs:
+    path: /api-docs         # Change OpenAPI JSON path if desired
+
+# application.yml
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.web.cors: DEBUG
