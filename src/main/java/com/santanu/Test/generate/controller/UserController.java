@@ -63,13 +63,13 @@ public class UserController {
         }
     }
 
-    @PostMapping("/forgot-password")
+    @PostMapping(value = "/forgot-password",  produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> forgotPassword(@RequestBody ForgotPasswordRequest request) {
         userService.forgotPassword(request.getEmail());
         return ResponseEntity.ok("Reset link sent to your email");
     }
 
-    @PostMapping("/reset-password")
+    @PostMapping(value = "/reset-password",  produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordRequest request) {
         userService.resetPassword(request.getResetToken(), request.getNewPassword());
         return ResponseEntity.ok("Password reset successful");

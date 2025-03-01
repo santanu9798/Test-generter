@@ -70,7 +70,7 @@ public class TestPaperServiceImpl implements TestPaperService {
             List<QuestionDTO> questions = questionResults.stream().map(row ->
                     QuestionDTO.builder()
                            // .id((Long) row[0])
-                            .text((String) row[1])
+                            .question((String) row[1])
                             .type(QuestionType.valueOf((String) row[2]))
                             .topic((String) row[3])
                             .difficulty(Difficulty.valueOf(row[4].toString()))

@@ -2,7 +2,9 @@ package com.santanu.Test.generate.dto;
 
 import com.santanu.Test.generate.dto.enumaration.Difficulty;
 import com.santanu.Test.generate.dto.enumaration.QuestionType;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
@@ -13,24 +15,22 @@ import java.util.List;
 @Builder
 public class QuestionDTO {
 
-    @NotBlank
-    private String text;
+    @NotBlank(message = "Question text is required")
+    private String question;
 
-    @NotBlank
     private QuestionType type;
 
-    @NotBlank
+    @NotBlank(message = "Topic is required")
     private String topic;
 
-    @NotBlank
     private Difficulty difficulty;
 
-    @Size(min = 1)
+    @Size(min = 1, message = "At least one option is required")
     private List<String> options;
 
-    @NotBlank
+    @NotBlank(message = "Correct answer is required")
     private String correctAnswer;
 
-    @NotBlank
+    @Min(value = 1, message = "Marks must be at least 1")
     private int marks;
 }
