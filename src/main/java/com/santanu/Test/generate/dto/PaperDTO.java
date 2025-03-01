@@ -1,6 +1,5 @@
 package com.santanu.Test.generate.dto;
 
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -11,6 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class PaperDTO {
+
     @NotBlank
     private String name;
 
@@ -19,17 +19,15 @@ public class PaperDTO {
 
     @NotBlank
     private String courseCode;
+
     private String description;
 
-    @NotBlank
     private int totalMarks;
 
-    @NotBlank
     private int totalQuestions;
 
     private int credit;
 
-    @NotBlank
     private int totalTime;
 
     @Size(min = 1)

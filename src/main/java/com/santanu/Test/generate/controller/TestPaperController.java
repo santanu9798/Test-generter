@@ -9,12 +9,14 @@ import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.properties.*;
 import com.santanu.Test.generate.dto.PaperDTO;
 import com.santanu.Test.generate.dto.PaperQuestionsDTO;
-import com.santanu.Test.generate.dto.enumaration.QuestionType;
 import com.santanu.Test.generate.model.Distribution;
 import com.santanu.Test.generate.model.Paper;
 import com.santanu.Test.generate.model.Question;
 import com.santanu.Test.generate.service.QuestionBankService;
 import com.santanu.Test.generate.service.TestPaperService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.santanu.Test.generate.utils.TestPaperUtils.getOption;
 
-@RestController("/api/test-papers")
+@RestController
+@RequestMapping("/api/test-papers")
 @Tag(name = "Test Paper Management")
 @Validated
 public class TestPaperController {
@@ -45,7 +48,12 @@ public class TestPaperController {
         this.testPaperService = testPaperService;
     }
 
-    @PostMapping("/generate")
+    @Operation(summary = "Generate a Test Paper", description = "Creates a new test paper based on provided data")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Test paper generated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid test paper data")
+    })
+    @PostMapping(value = "/generate", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Paper> generateTestPaper(@Valid @RequestBody PaperDTO request) {
         Paper response = testPaperService.createTestPaper(request);
         return ResponseEntity.ok()
