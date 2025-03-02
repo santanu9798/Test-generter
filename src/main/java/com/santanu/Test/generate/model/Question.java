@@ -14,7 +14,7 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String text;
+    private String question;
 
     @Enumerated(EnumType.STRING)
     private QuestionType type;

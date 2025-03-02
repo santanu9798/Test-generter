@@ -61,6 +61,16 @@ public class TestPaperController {
                 .body(response);
     }
 
+    @Operation(summary = "Get All Test Papers", description = "Retrieves a list of all test papers")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Test papers retrieved successfully")
+    })
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<PaperDTO>> getAllTestPapers() {
+        List<PaperDTO> testPapers = testPaperService.getAllTestPapers();
+        return ResponseEntity.ok(testPapers);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Paper> getTestPaper(@PathVariable Long id) {
         Optional<Paper> response = testPaperService.getTestPaper(id);
@@ -197,7 +207,7 @@ public class TestPaperController {
         AtomicInteger i = new AtomicInteger(1);
         allQuestion.forEach(questionDTO -> {
             Paragraph paragraphQuestion = new Paragraph();
-            paragraphQuestion.add(i.getAndIncrement()+". "+questionDTO.getText());
+            paragraphQuestion.add(i.getAndIncrement()+". "+questionDTO.getQuestion());
             paragraphQuestion.setFirstLineIndent(20f);
             document.add(paragraphQuestion);
 

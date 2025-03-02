@@ -12,7 +12,7 @@ public interface QuestionBankService {
 
     QuestionDTO createQuestion(QuestionDTO user);
 
-    List<Question> getAllQuestion();
+    List<QuestionDTO> getAllQuestion();
 
     Map<String, List<Question>> getAllQuestionByQuestionType();
 }

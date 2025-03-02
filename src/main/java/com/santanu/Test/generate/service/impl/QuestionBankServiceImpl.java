@@ -38,9 +38,9 @@ public class QuestionBankServiceImpl implements QuestionBankService {
     }
 
     @Override
-    public List<Question> getAllQuestion() {
+    public List<QuestionDTO> getAllQuestion() {
 
-        return questionBankRepository.findAll().stream().toList();
+        return questionBankRepository.findAll().stream().map(questionBankMapper::toDTO).toList();
     }
 
     @Override

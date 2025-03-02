@@ -18,7 +18,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class TestPaperServiceImpl implements TestPaperService {
@@ -43,11 +44,17 @@ public class TestPaperServiceImpl implements TestPaperService {
 
         if (paper.getDistributions() != null) {
             for (Distribution distribution : paper.getDistributions()) {
-                distribution.setPaper(paper);  // Ensure that the paper reference is set
+                distribution.setPaper(paper);
             }
         }
 
         return testPaperRepository.save(paper);
+    }
+
+    @Override
+    public List<PaperDTO> getAllTestPapers() {
+        List<Paper> paperDTOList =  testPaperRepository.findAll();
+        return testPaperMapper.toDtoList(paperDTOList);
     }
 
     @Override
@@ -57,7 +64,6 @@ public class TestPaperServiceImpl implements TestPaperService {
 
     @Override
     public PaperQuestionsDTO fetchQuestionByTestPaper(Long paperId) {
-        //get questions by types and no of questions based on define for each types and return by group types table question and testpaper
 
         Paper paper = testPaperRepository.findById(paperId)
                 .orElseThrow(() -> new RuntimeException("Paper not found"));
@@ -78,7 +84,7 @@ public class TestPaperServiceImpl implements TestPaperService {
                             .correctAnswer((String) row[6])
                             .marks((Integer) row[7])
                             .build()
-            ).collect(Collectors.toList());
+            ).collect(toList());
 
             groupedQuestions.add(new QuestionGroupDTO(dist.getType(), questions));
         }
