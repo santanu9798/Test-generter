@@ -6,7 +6,9 @@ import com.santanu.Test.generate.mapper.QuestionBankMapper;
 import com.santanu.Test.generate.model.Question;
 import com.santanu.Test.generate.repository.QuestionBankRepository;
 import com.santanu.Test.generate.service.QuestionBankService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,4 +52,31 @@ public class QuestionBankServiceImpl implements QuestionBankService {
                 .collect(Collectors.groupingBy(q -> q.getType().name()));
 
     }
+
+    @Override
+    public QuestionDTO updateQuestion(Long id, QuestionDTO updatedQuestion) {
+        return questionBankRepository.findById(id)
+                .map(question -> {
+                    question.setQuestion(updatedQuestion.getQuestion());
+                    question.setType(updatedQuestion.getType());
+                    question.setTopic(updatedQuestion.getTopic());
+                    question.setDifficulty(updatedQuestion.getDifficulty());
+                    question.setCorrectAnswer(updatedQuestion.getCorrectAnswer());
+                    question.setMarks(updatedQuestion.getMarks());
+                    return questionBankRepository.save(question);
+                })
+                .map(questionBankMapper::toDTO) // Convert to DTO
+                .orElseThrow(() -> new EntityNotFoundException("Question not found with id: " + id));
+    }
+
+    @Override
+    public boolean deleteQuestion(Long id) {
+        if(questionBankRepository.existsById(id)){
+            questionBankRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
+
 }

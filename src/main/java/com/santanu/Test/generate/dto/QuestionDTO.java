@@ -14,6 +14,8 @@ import java.util.List;
 @Builder
 public class QuestionDTO {
 
+    private Long id;
+
     @NotBlank(message = "Question text is required")
     private String question;
 

@@ -10,9 +10,14 @@ import java.util.Map;
 
 public interface QuestionBankService {
 
-    QuestionDTO createQuestion(QuestionDTO user);
+    QuestionDTO createQuestion(QuestionDTO questionDTO);
 
     List<QuestionDTO> getAllQuestion();
 
     Map<String, List<Question>> getAllQuestionByQuestionType();
+
+    QuestionDTO updateQuestion(Long id, QuestionDTO updatedQuestion);
+
+    boolean deleteQuestion(Long id);
+
 }
